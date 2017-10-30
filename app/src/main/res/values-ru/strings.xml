@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Weatherapp</string>
+    <string name="hi">hi my friend</string>
+    <string name="text_find_weather">Погода в городе</string>
+    <string name="button_findout">Узнать</string>
+    <string name="file_name">com.example.myapp.PREFERENCE_FILE_KEY</string>
+
+    <string-array name="cities">
+        <item>Ташкент</item>
+        <item>Москва</item>
+        <item>Нью-йорк</item>
+        <item>Милан</item>
+        <item>Париж</item>
+    </string-array>
+
+    <string-array name="weather_for_city">
+        <item>10 C</item>
+        <item>-10 C</item>
+        <item>25 C</item>
+        <item>15 C</item>
+        <item>8 С</item>
+    </string-array>
+
+
+
+</resources>

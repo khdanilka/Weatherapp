@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Weatherapp</string>
+    <string name="hi">hi my friend</string>
+    <string name="text_find_weather">The weather in the city</string>
+    <string name="button_findout">Find out</string>
+    <string name="file_name">com.example.myapp.PREFERENCE_FILE_KEY</string>
+
+    <string-array name="cities">
+        <item>Tashkent</item>
+        <item>Moscow</item>
+        <item>New York</item>
+        <item>Milan</item>
+        <item>Paris</item>
+    </string-array>
+
+    <string-array name="weather_for_city">
+        <item>10 C</item>
+        <item>-10 C</item>
+        <item>25 C</item>
+        <item>15 C</item>
+        <item>8 С</item>
+    </string-array>
+</resources>
