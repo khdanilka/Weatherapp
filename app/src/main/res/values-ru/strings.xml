@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Weatherapp</string>
+    <string name="app_name">Погода</string>
     <string name="hi">hi my friend</string>
     <string name="text_find_weather">Погода в городе</string>
     <string name="button_findout">Узнать</string>
     <string name="file_name">com.example.myapp.PREFERENCE_FILE_KEY</string>
+    <string name="share_button">Поделиться</string>
+    <string name="empty_weather">Погода пусто</string>
+    <string name="seeAllEmpty">я видел всякое и следующий экран тоже</string>
 
     <string-array name="cities">
         <item>Ташкент</item>

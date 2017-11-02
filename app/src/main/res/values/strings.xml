@@ -4,6 +4,9 @@
     <string name="text_find_weather">The weather in the city</string>
     <string name="button_findout">Find out</string>
     <string name="file_name">com.example.myapp.PREFERENCE_FILE_KEY</string>
+    <string name="share_button">Share</string>
+    <string name="empty_weather">Weather empty</string>
+    <string name="seeAllEmpty">я видел всякое и следующий экран тоже</string>
 
     <string-array name="cities">
         <item>Tashkent</item>

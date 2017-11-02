@@ -1,7 +1,6 @@
 package weather.khdanapp.com.weatherapp;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,16 +8,13 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.util.Map;
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private TextView weather_res;
     private Spinner city_selection;
-    SharedPreferences sharedPref;
-    final String SAVED_TEXT = "saved_text";
+    TextView seeNext;
+
+    static final int CODE_FOR_RESULT = 1;
+    static int count;
 
 
     @Override
@@ -26,20 +22,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        int city_n = readData();
-        String city_arr[] = getResources().getStringArray(R.array.cities);
-
-        weather_res = (TextView) findViewById(R.id.result);
         city_selection = (Spinner) findViewById(R.id.spin);
-
+        int city_n = DataClass.readData(this);
         if (city_n > 0) city_selection.setSelection(city_n);
 
         Button find_b = (Button) findViewById(R.id.find);
-
         find_b.setOnClickListener(MainActivity.this);
 
-
-
+        seeNext = (TextView) findViewById(R.id.seeAll);
     }
 
     @Override
@@ -47,28 +37,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if   (view .getId()  ==  R.id.find)   {
                 int  city_pos  = city_selection.getSelectedItemPosition();
-                String res_weather_arr[] = this.getResources().getStringArray(R.array.weather_for_city);
-                weather_res.setText(res_weather_arr[city_pos]);
-                writeToPref(city_pos,res_weather_arr[city_pos]);
+                String cityWeather = DataClass.getWeatherByCityId(this,city_pos);
+                DataClass.writeToPref(this,city_pos,cityWeather);
+
+                String mes = city_selection.getSelectedItem() + ": " + cityWeather;
+                Intent n = new Intent(this,ResultActivity.class);
+                n.putExtra(ResultActivity.EXTRA_MESSAGE, mes);
+                startActivityForResult(n, CODE_FOR_RESULT);
         }
 
     }
 
-    private void writeToPref(int city_pos, String weather){
-        sharedPref = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor ed = sharedPref.edit();
-        ed.putString(SAVED_TEXT, String.valueOf(city_pos));
-        ed.apply();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+
+        if ((data!= null) && (requestCode == CODE_FOR_RESULT)) {
+            count++;
+            String str = DataClass.getTextByID(this,R.string.seeAllEmpty) + ". Уже " + count + " раз";
+            seeNext.setText(str);
+        }
+
     }
-
-    private int readData(){
-        sharedPref = getPreferences(MODE_PRIVATE);
-
-        String savedText = sharedPref.getString(SAVED_TEXT, "");
-        if (sharedPref.contains(SAVED_TEXT)) return Integer.valueOf(savedText);
-
-        return -1;
-    }
-
 }
 
