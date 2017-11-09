@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -13,6 +14,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Spinner city_selection;
     TextView seeNext;
+    CheckBox pressure;
+    CheckBox windSpeed;
+    CheckBox moisture;
+    boolean[] checkBoxValue = new boolean[3];
 
     static final int CODE_FOR_RESULT = 1;
     static int count;
@@ -25,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         city_selection = (Spinner) findViewById(R.id.spin);
         int city_n = DataClass.readData(this);
+        checkBoxValue = DataClass.readCheckBox(this);
         if (savedInstanceState!= null) {
             int k = savedInstanceState.getInt(CITY_INSTANCE);
             city_selection.setSelection(k);
@@ -35,21 +41,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         find_b.setOnClickListener(MainActivity.this);
 
         seeNext = (TextView) findViewById(R.id.seeAll);
+
+
+        pressure = (CheckBox) findViewById(R.id.pressure);
+        if (checkBoxValue[0]) pressure.setChecked(true);
+        windSpeed = (CheckBox) findViewById(R.id.wind_speed);
+        if (checkBoxValue[1]) windSpeed.setChecked(true);
+        moisture = (CheckBox) findViewById(R.id.moisture);
+        if (checkBoxValue[2]) moisture.setChecked(true);
+
+        pressure.setOnClickListener(this);
+        windSpeed.setOnClickListener(this);
+        moisture.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
 
-        if   (view .getId()  ==  R.id.find)   {
+        if   (view.getId()  ==  R.id.find)   {
                 int  city_pos  = city_selection.getSelectedItemPosition();
                 String cityWeather = DataClass.getWeatherByCityId(this,city_pos);
-//                DataClass.writeToPref(this,city_pos,cityWeather);
                 String mes = city_selection.getSelectedItem() + ": " + cityWeather;
                 Intent n = new Intent(this,ResultActivity.class);
                 n.putExtra(ResultActivity.EXTRA_MESSAGE, mes);
+                n.putExtra(ResultActivity.EXTRA_CHECKBOX,checkBoxValue);
+                n.putExtra(ResultActivity.EXTRA_WEATHER_ID,city_pos);
                 startActivityForResult(n, CODE_FOR_RESULT);
+        } else if (view.getId() == R.id.pressure) {
+            setCheckBox(pressure,0);
+        } else if (view.getId() == R.id.wind_speed) {
+            setCheckBox(windSpeed,1);
+        } else if (view.getId() == R.id.moisture) {
+            setCheckBox(moisture,2);
         }
+    }
 
+    private void setCheckBox(CheckBox checkBox, int i) {
+        if (checkBox.isChecked()) checkBoxValue[i] = true;
+        else if (!checkBox.isChecked()) checkBoxValue[i] = false;
     }
 
     @Override
@@ -113,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int  city_pos  = city_selection.getSelectedItemPosition();
         String cityWeather = DataClass.getWeatherByCityId(this,city_pos);
         DataClass.writeToPref(this,city_pos);
+        DataClass.writeCheckBoxToPref(this,checkBoxValue);
 
         super.onStop();
         Log.d(LOG_TAG, "onStop");

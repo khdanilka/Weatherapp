@@ -8,6 +8,9 @@
     <string name="share_button">Поделиться</string>
     <string name="empty_weather">Погода пусто</string>
     <string name="seeAllEmpty">я видел всякое и следующий экран тоже</string>
+    <string name="pressure">Давление</string>
+    <string name="moisture">Влажность</string>
+    <string name="wind_speed">Скорость ветра</string>
 
     <string-array name="cities">
         <item>Ташкент</item>
@@ -26,5 +29,28 @@
     </string-array>
 
 
+    <string-array name="pressure">
+        <item>12</item>
+        <item>11</item>
+        <item>15</item>
+        <item>18</item>
+        <item>60</item>
+    </string-array>
+
+    <string-array name="wind_speed">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+    <string-array name="moisture">
+    <item>30</item>
+    <item>40</item>
+    <item>50</item>
+    <item>60</item>
+    <item>70</item>
+    </string-array>
 
 </resources>
