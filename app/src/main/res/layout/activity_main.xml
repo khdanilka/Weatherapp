@@ -43,21 +43,19 @@
         android:layout_marginLeft="@dimen/standard_padding_left"
         android:text="@string/moisture" />
 
-    <Button
-            android:id="@+id/find"
-            android:layout_marginLeft="@dimen/standard_padding_left"
-            android:layout_marginRight="@dimen/standard_padding_left"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/button_findout"/>
-
-
-
     <TextView
         android:id="@+id/seeAll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:paddingLeft="@dimen/standard_padding_left"/>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_marginBottom="8dp"/>
 
 </LinearLayout>

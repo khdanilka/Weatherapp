@@ -45,6 +45,11 @@ final class DataClass {
         return res_value[id];
     }
 
+    static int getItemCount(Context context, int id_arr){
+        String res_value[] = context.getResources().getStringArray(id_arr);
+        return res_value.length;
+    }
+
     static void writeCheckBoxToPref(Activity activity, boolean[] b){
         sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor ed = sharedPref.edit();
