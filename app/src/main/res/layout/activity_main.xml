@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+
     <TextView
         android:id="@+id/Text"
         android:layout_width="match_parent"
@@ -11,15 +12,6 @@
         android:text="@string/text_find_weather"
         android:textSize="30sp"
         android:paddingLeft="@dimen/standard_padding_left"/>
-
-
-        <Spinner
-            android:id="@+id/spin"
-            android:layout_marginLeft="@dimen/standard_padding_left"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:entries="@array/cities">
-        </Spinner>
 
 
     <CheckBox
@@ -59,3 +51,4 @@
         android:layout_marginBottom="8dp"/>
 
 </LinearLayout>
+
