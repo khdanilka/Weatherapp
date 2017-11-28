@@ -96,6 +96,10 @@ public class ResultFragment extends Fragment implements View.OnClickListener {
         intentShare.putExtra(Intent.EXTRA_TEXT, messageText);
       //  if (intentShare.resolveActivity(getPackageManager()) != null)
         startActivity(intentShare);
+
+
+
+
     }
 
     private void setCheckBoxResults(boolean[] b){

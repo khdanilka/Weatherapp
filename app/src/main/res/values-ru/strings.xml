@@ -11,6 +11,11 @@
     <string name="pressure">Давление</string>
     <string name="moisture">Влажность</string>
     <string name="wind_speed">Скорость ветра</string>
+    <string name="menu_add">Добавить</string>
+    <string name="menu_clear">Очистить</string>
+    <string name="menu_test">Тест</string>
+    <string name="context_1">Открыть</string>
+    <string name="context_2">Закрыть</string>
 
     <string-array name="cities">
         <item>Ташкент</item>

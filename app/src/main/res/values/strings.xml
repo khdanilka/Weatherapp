@@ -10,6 +10,12 @@
     <string name="pressure">Pressure</string>
     <string name="moisture">Moisture</string>
     <string name="wind_speed">Wind speed</string>
+    <string name="menu_add">Add</string>
+    <string name="menu_clear">Clear</string>
+    <string name="menu_test">Test</string>
+    <string name="context_1">Open</string>
+    <string name="context_2">Close</string>
+    <string name="additional_settings">Additional settings</string>
 
     <string-array name="cities">
         <item>Tashkent</item>

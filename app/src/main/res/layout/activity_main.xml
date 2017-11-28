@@ -13,27 +13,12 @@
         android:textSize="30sp"
         android:paddingLeft="@dimen/standard_padding_left"/>
 
-
-    <CheckBox
-        android:id="@+id/pressure"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/additional"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/standard_padding_left"
-        android:text="@string/pressure" />
-
-    <CheckBox
-        android:id="@+id/wind_speed"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/standard_padding_left"
-        android:text="@string/wind_speed" />
-
-    <CheckBox
-        android:id="@+id/moisture"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/standard_padding_left"
-        android:text="@string/moisture" />
+        android:text="@string/additional_settings"
+        android:layout_marginLeft="@dimen/standard_padding_left"/>
 
     <TextView
         android:id="@+id/seeAll"

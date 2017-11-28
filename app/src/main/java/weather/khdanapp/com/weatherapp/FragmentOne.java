@@ -1,5 +1,6 @@
 package weather.khdanapp.com.weatherapp;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -9,12 +10,20 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class FragmentOne extends Fragment implements View.OnClickListener {
 
@@ -26,12 +35,14 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
     CheckBox windSpeed;
     CheckBox moisture;
     boolean[] checkBoxValue = new boolean[3];
+    Button additionalSet;
 
     static final int CODE_FOR_RESULT = 1;
     static int count;
 
     private FragmentOneListener starActivity;
-
+    RecyclerView itemCityRecyclerView;
+    MyAdapter adapter;
 
     @Override
     public void onAttach(Context context) {
@@ -53,45 +64,133 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
         }
         //else if (city_n > 0) city_selection.setSelection(city_n);
 
+        setHasOptionsMenu(true);
         seeNext = (TextView) view.findViewById(R.id.seeAll);
 
-        pressure = (CheckBox) view.findViewById(R.id.pressure);
-        if (checkBoxValue[0]) pressure.setChecked(true);
-        windSpeed = (CheckBox) view.findViewById(R.id.wind_speed);
-        if (checkBoxValue[1]) windSpeed.setChecked(true);
-        moisture = (CheckBox) view.findViewById(R.id.moisture);
-        if (checkBoxValue[2]) moisture.setChecked(true);
+        additionalSet = (Button) view.findViewById(R.id.additional);
+        additionalSet.setOnClickListener(this);
 
-        pressure.setOnClickListener(this);
-        windSpeed.setOnClickListener(this);
-        moisture.setOnClickListener(this);
-
-
-        RecyclerView itemCityRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view); //Найдем наш RecyclerView
+        itemCityRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view); //Найдем наш RecyclerView
+        registerForContextMenu(itemCityRecyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext()); //Создадим LinearLayoutManager
         layoutManager.setOrientation(VERTICAL);//Обозначим ориентацию
         itemCityRecyclerView.setLayoutManager(layoutManager);//Назначим нашему RecyclerView созданный ранее layoutManager
-        itemCityRecyclerView.setAdapter(new MyAdapter());//Назначим нашему RecyclerView адаптер
+        adapter = new MyAdapter();
+        itemCityRecyclerView.setAdapter(adapter);//Назначим нашему RecyclerView адаптер
 
 
         return view;
     }
 
-    @Override
-    public void onClick(View view) {
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        //super.onActivityResult(requestCode, resultCode, data);
+//
+//        if ((data!= null) && (requestCode == CODE_FOR_RESULT)) {
+//            count++;
+//            String str = DataClass.getTextByID(this,R.string.seeAllEmpty) + ". Уже " + count + " раз";
+//            seeNext.setText(str);
+//        }
+//
+//    }
 
-        if (view.getId() == R.id.pressure) {
-            setCheckBox(pressure,0);
-        } else if (view.getId() == R.id.wind_speed) {
-            setCheckBox(windSpeed,1);
-        } else if (view.getId() == R.id.moisture) {
-            setCheckBox(moisture,2);
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.main_menu, menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_add:
+                Log.d("тест: " , "edit");
+                return true;
+            case R.id.menu_clear:
+                Log.d("тест: " , "clear");
+                return true;
+            case R.id.menu_test:
+                Log.d("тест: " , "test");
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+//    @Override
+//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+//        super.onCreateContextMenu(menu, v, menuInfo);
+//        MenuInflater inflater = getActivity().getMenuInflater();
+//        inflater.inflate(R.menu.contex_menu, menu);
+//    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.context_1:
+                //Log.d("тест: " , "open: " + currentContextPosition);
+                showActivity(currentContextPosition);
+                return true;
+            case R.id.context_2:
+                //Log.d("тест: " , "close: " + currentContextPosition);
+                Toast toast = Toast.makeText(getContext(),
+                        "Context menu was closed", Toast.LENGTH_SHORT);
+                toast.show();
+                return true;
+            default:
+                return super.onContextItemSelected(item);
         }
     }
 
-    private void setCheckBox(CheckBox checkBox, int i) {
-        if (checkBox.isChecked()) checkBoxValue[i] = true;
-        else if (!checkBox.isChecked()) checkBoxValue[i] = false;
+    @Override
+    public void onClick(View view) {
+
+        if (view.getId() == R.id.additional) {
+            showPopup(view);
+        }
+
+    }
+
+    PopupMenu popup;
+    public void showPopup(View v) {
+        if (popup==null) {
+            popup = new PopupMenu(getContext(), v);
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.pres_menu:
+                            setCheckBox(item, 0);
+                            return true;
+                        case R.id.wind_menu:
+                            setCheckBox(item, 1);
+                            return true;
+                        case R.id.mois_menu:
+                            setCheckBox(item, 2);
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+            });
+            popup.inflate(R.menu.more_settings_menu);
+        }
+        popup.show();
+    }
+
+    private void setCheckBox(MenuItem item, int i) {
+        if (item.isChecked()) {
+            checkBoxValue[i] = false;
+            item.setChecked(false);
+        }
+        else if (!item.isChecked()) {
+            checkBoxValue[i] = true;
+            item.setChecked(true);
+        }
     }
 
 //    @Override
@@ -159,14 +258,21 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
 ////        Log.d(LOG_TAG, "onStop");
 //    }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private int currentContextPosition;
+
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener {
 
         private TextView categoryNameTextView;
 
         public MyViewHolder(LayoutInflater inflater, ViewGroup parent){
-            super(inflater.inflate(R.layout.view_item,parent,false));
+            this(inflater.inflate(R.layout.view_item,parent,false));
             itemView.setOnClickListener(this);
             categoryNameTextView = (TextView) itemView.findViewById(R.id.category_item_text);
+        }
+
+        public MyViewHolder(View v){
+            super(v);
+            v.setOnCreateContextMenuListener(this);
         }
 
         void bind(int position) {
@@ -176,7 +282,16 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
 
         @Override
         public void onClick(View view) {
-            showActivity(this.getLayoutPosition());
+            //showActivity(this.getLayoutPosition());
+            currentContextPosition = this.getLayoutPosition();
+            itemCityRecyclerView.showContextMenuForChild(view);
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+            MenuInflater inflater = getActivity().getMenuInflater();
+            inflater.inflate(R.menu.contex_menu, contextMenu);
+
         }
     }
 
@@ -202,10 +317,10 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
 
     //Запускаем активити для конкретной услуги
     private void showActivity(int categoryId) {
-
         starActivity.onItemClicked(categoryId,checkBoxValue);
-
     }
+
+
 
 }
 
