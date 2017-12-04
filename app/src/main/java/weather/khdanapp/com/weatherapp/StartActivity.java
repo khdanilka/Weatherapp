@@ -23,7 +23,6 @@ public class StartActivity extends AppCompatActivity implements FragmentOneListe
 
         transaction.commit();
 
-
     }
 
 

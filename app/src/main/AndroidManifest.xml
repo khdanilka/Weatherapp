@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".StartActivity"
+        <activity
+            android:name=".StartActivity"
             android:screenOrientation="portrait">
 
             <!-- android:configChanges="orientation|screenSize"> -->
@@ -19,6 +20,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".NavActivity"
+            android:label="@string/title_activity_nav"></activity>
     </application>
 
 </manifest>
