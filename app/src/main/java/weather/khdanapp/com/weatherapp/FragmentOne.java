@@ -1,6 +1,7 @@
 package weather.khdanapp.com.weatherapp;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -25,6 +26,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.io.IOException;
+
 public class FragmentOne extends Fragment implements View.OnClickListener {
 
     private final static int VERTICAL = 1;
@@ -36,6 +42,8 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
     CheckBox moisture;
     boolean[] checkBoxValue = new boolean[3];
     Button additionalSet;
+    Button choosingCity;
+    TextView t;
 
     static final int CODE_FOR_RESULT = 1;
     static int count;
@@ -65,18 +73,24 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
         //else if (city_n > 0) city_selection.setSelection(city_n);
 
         setHasOptionsMenu(true);
-        seeNext = (TextView) view.findViewById(R.id.seeAll);
+        //seeNext = (TextView) view.findViewById(R.id.seeAll);
 
         additionalSet = (Button) view.findViewById(R.id.additional);
         additionalSet.setOnClickListener(this);
 
-        itemCityRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view); //Найдем наш RecyclerView
-        registerForContextMenu(itemCityRecyclerView);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext()); //Создадим LinearLayoutManager
-        layoutManager.setOrientation(VERTICAL);//Обозначим ориентацию
-        itemCityRecyclerView.setLayoutManager(layoutManager);//Назначим нашему RecyclerView созданный ранее layoutManager
-        adapter = new MyAdapter();
-        itemCityRecyclerView.setAdapter(adapter);//Назначим нашему RecyclerView адаптер
+        choosingCity = (Button) view.findViewById(R.id.choosing_city);
+        choosingCity.setOnClickListener(this);
+
+//        itemCityRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view); //Найдем наш RecyclerView
+//        registerForContextMenu(itemCityRecyclerView);
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext()); //Создадим LinearLayoutManager
+//        layoutManager.setOrientation(VERTICAL);//Обозначим ориентацию
+//        itemCityRecyclerView.setLayoutManager(layoutManager);//Назначим нашему RecyclerView созданный ранее layoutManager
+//        adapter = new MyAdapter();
+//        itemCityRecyclerView.setAdapter(adapter);//Назначим нашему RecyclerView адаптер
+
+
+        t = (TextView) view.findViewById(R.id.seeAll);
 
 
         return view;
@@ -151,7 +165,16 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
 
         if (view.getId() == R.id.additional) {
             showPopup(view);
+        } else if (view.getId() == R.id.choosing_city){
+            showDialog();
         }
+
+    }
+
+    private void showDialog() {
+
+        android.support.v4.app.DialogFragment newFragment = DialogCityChooseFragment.newInstance();
+        newFragment.show(getActivity().getSupportFragmentManager(), "dialog");
 
     }
 
@@ -259,6 +282,51 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
 //    }
 
     private int currentContextPosition;
+
+    public void setWeatherText(final String str) {
+
+        final String city = str;
+        Log.d("Choosed ",str);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String jsonText = DataClass.getWeatherForCity(city);
+                    Log.i("JSON",jsonText);
+                    GsonBuilder builder = new GsonBuilder();
+                    Gson gson = builder.create();
+                    WeatherFromService murzik = gson.fromJson(jsonText, WeatherFromService.class);
+                    String result = "Город: " + murzik.getName() + " Погода: " + murzik.getMain().getTemp();
+                    Log.i("GSON", "Город: " + murzik.getName() + "\nПогода: " + murzik.getMain().getTemp());
+
+                    postOnMain(result);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }).start();
+
+
+    }
+
+
+    public void postOnMain(String str){
+
+        final String strT = str;
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                t.setText(strT);
+            }
+        });
+
+    }
+
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener {
 

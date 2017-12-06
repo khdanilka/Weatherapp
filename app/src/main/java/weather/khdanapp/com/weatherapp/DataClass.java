@@ -5,6 +5,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.io.IOException;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 final class DataClass {
 
     private static SharedPreferences sharedPref;
@@ -72,5 +78,18 @@ final class DataClass {
         return b;
     }
 
+
+    private static OkHttpClient client = new OkHttpClient();
+
+    static String getWeatherForCity(String city) throws IOException {
+
+        String url = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=1cc4dc8d4cb24e9e1d04eb5e7c57d8e9";
+
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        Response response = client.newCall(request).execute();
+        return response.body().string();
+    }
 
 }

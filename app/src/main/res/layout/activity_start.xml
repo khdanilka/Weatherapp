@@ -7,9 +7,10 @@
     android:layout_height="match_parent">
 
 
-    <android.support.design.widget.CoordinatorLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
@@ -27,7 +28,7 @@
 
         <include layout="@layout/content_nav" />
 
-    </android.support.design.widget.CoordinatorLayout>
+    </LinearLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation"
@@ -37,6 +38,8 @@
         app:headerLayout="@layout/nav_header_nav"
         app:menu="@menu/activity_nav_drawer2"
         app:theme="@style/AppTheme"/>
+
+
 </android.support.v4.widget.DrawerLayout>
 
 

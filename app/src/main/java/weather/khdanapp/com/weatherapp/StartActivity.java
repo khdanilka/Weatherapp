@@ -12,7 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class StartActivity extends AppCompatActivity implements FragmentOneListener, NavigationView.OnNavigationItemSelectedListener {
+public class StartActivity extends AppCompatActivity implements FragmentOneListener, NavigationView.OnNavigationItemSelectedListener, DialogCityChooseFragment.OnFragmentInteractionListener {
 
     FragmentOne detailFragment;
 
@@ -38,10 +38,7 @@ public class StartActivity extends AppCompatActivity implements FragmentOneListe
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-
-
     }
-
 
     @Override
     public void onItemClicked(int id,boolean[] b) {
@@ -88,5 +85,10 @@ public class StartActivity extends AppCompatActivity implements FragmentOneListe
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_start);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onFragmentInteraction(String str) {
+        detailFragment.setWeatherText(str);
     }
 }

@@ -8,4 +8,6 @@
     tools:showIn="@layout/activity_start"
     android:id="@+id/frame_segment">
 
+
 </FrameLayout>
+
