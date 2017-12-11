@@ -35,7 +35,6 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
 
     private final static int VERTICAL = 1;
 
-    private Spinner city_selection;
     TextView seeNext;
     CheckBox pressure;
     CheckBox windSpeed;
@@ -62,14 +61,17 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        View view = inflater.inflate(R.layout.activity_main,  container, false);
-         //city_selection = (Spinner) view.findViewById(R.id.spin);
-        //int city_n = DataClass.readData(getContext());
-        //checkBoxValue = DataClass.readCheckBox(this);
-        if (savedInstanceState!= null) {
-            int k = savedInstanceState.getInt(CITY_INSTANCE);
-            city_selection.setSelection(k);
-        }
+        View view = inflater.inflate(R.layout.activity_main, container, false);
+        String city_n = DataClass.readData(getActivity());
+        if (!city_n.equals("")) setWeatherText(city_n);
+
+        checkBoxValue = DataClass.readCheckBox(getActivity());
+
+
+//        if (savedInstanceState!= null) {
+//            int k = savedInstanceState.getInt(CITY_INSTANCE);
+//            city_selection.setSelection(k);
+//        }
         //else if (city_n > 0) city_selection.setSelection(city_n);
 
         setHasOptionsMenu(true);
@@ -88,7 +90,6 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
 //        itemCityRecyclerView.setLayoutManager(layoutManager);//Назначим нашему RecyclerView созданный ранее layoutManager
 //        adapter = new MyAdapter();
 //        itemCityRecyclerView.setAdapter(adapter);//Назначим нашему RecyclerView адаптер
-
 
         t = (TextView) view.findViewById(R.id.seeAll);
 
@@ -172,10 +173,8 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
     }
 
     private void showDialog() {
-
         android.support.v4.app.DialogFragment newFragment = DialogCityChooseFragment.newInstance();
         newFragment.show(getActivity().getSupportFragmentManager(), "dialog");
-
     }
 
     PopupMenu popup;
@@ -201,6 +200,12 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
                 }
             });
             popup.inflate(R.menu.more_settings_menu);
+            MenuItem m1 = popup.getMenu().getItem(0);
+            if (checkBoxValue[0]) m1.setChecked(true);
+            MenuItem m2 = popup.getMenu().getItem(1);
+            if (checkBoxValue[1]) m2.setChecked(true);
+            MenuItem m3 = popup.getMenu().getItem(2);
+            if (checkBoxValue[2]) m3.setChecked(true);
         }
         popup.show();
     }
@@ -271,17 +276,18 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
 //        Log.d(LOG_TAG, "onStart");
 //    }
 
-//    public void onStop() {
-//
-//////        int  city_pos  = city_selection.getSelectedItemPosition();
-////        String cityWeather = DataClass.getWeatherByCityId(getActivity(),city_pos);
-////        DataClass.writeToPref(getActivity(),city_pos);
-////        DataClass.writeCheckBoxToPref(getActivity(),checkBoxValue);
-////        super.onStop();
-////        Log.d(LOG_TAG, "onStop");
-//    }
+    public void onStop() {
+
+        if (currentCity != null && !currentCity.isEmpty()) {
+            DataClass.writeToPref(getActivity(), currentCity);
+        } else DataClass.writeToPref(getActivity(), "");
+        DataClass.writeCheckBoxToPref(getActivity(),checkBoxValue);
+        super.onStop();
+        Log.d(LOG_TAG, "onStop");
+    }
 
     private int currentContextPosition;
+    private String currentCity;
 
     public void setWeatherText(final String str) {
 
@@ -297,10 +303,12 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
                     GsonBuilder builder = new GsonBuilder();
                     Gson gson = builder.create();
                     WeatherFromService murzik = gson.fromJson(jsonText, WeatherFromService.class);
-                    String result = "Город: " + murzik.getName() + " Погода: " + murzik.getMain().getTemp();
-                    Log.i("GSON", "Город: " + murzik.getName() + "\nПогода: " + murzik.getMain().getTemp());
-
-                    postOnMain(result);
+                    if (!murzik.getCod().equals(404)) {
+                        String result = "Город: " + murzik.getName() + " Погода: " + murzik.getMain().getTemp();
+                        Log.i("GSON", "Город: " + murzik.getName() + "\nПогода: " + murzik.getMain().getTemp());
+                        postOnMain(result);
+                        currentCity = murzik.getName();
+                    } else postOnMain("City not found");
 
                 } catch (IOException e) {
                     e.printStackTrace();
