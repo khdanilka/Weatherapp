@@ -21,7 +21,6 @@ public class DialogCityChooseFragment extends DialogFragment implements View.OnC
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
     public static DialogCityChooseFragment newInstance() {
         DialogCityChooseFragment fragment = new DialogCityChooseFragment();
         return fragment;
