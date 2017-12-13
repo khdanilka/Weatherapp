@@ -48,8 +48,8 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
     static int count;
 
     private FragmentOneListener starActivity;
-    RecyclerView itemCityRecyclerView;
-    MyAdapter adapter;
+    //RecyclerView itemCityRecyclerView;
+    // MyAdapter adapter;
 
     @Override
     public void onAttach(Context context) {
@@ -122,6 +122,9 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
         switch (item.getItemId()) {
             case R.id.menu_add:
                 Log.d("тест: " , "edit");
+                Intent intent = new Intent(getActivity(),HistoryActivity.class);
+                startActivity(intent);
+
                 return true;
             case R.id.menu_clear:
                 Log.d("тест: " , "clear");
@@ -142,24 +145,24 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
 //        inflater.inflate(R.menu.contex_menu, menu);
 //    }
 
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.context_1:
-                //Log.d("тест: " , "open: " + currentContextPosition);
-                showActivity(currentContextPosition);
-                return true;
-            case R.id.context_2:
-                //Log.d("тест: " , "close: " + currentContextPosition);
-                Toast toast = Toast.makeText(getContext(),
-                        "Context menu was closed", Toast.LENGTH_SHORT);
-                toast.show();
-                return true;
-            default:
-                return super.onContextItemSelected(item);
-        }
-    }
+//    @Override
+//    public boolean onContextItemSelected(MenuItem item) {
+//
+//        switch (item.getItemId()) {
+//            case R.id.context_1:
+//                //Log.d("тест: " , "open: " + currentContextPosition);
+//                showActivity(currentContextPosition);
+//                return true;
+//            case R.id.context_2:
+//                //Log.d("тест: " , "close: " + currentContextPosition);
+//                Toast toast = Toast.makeText(getContext(),
+//                        "Context menu was closed", Toast.LENGTH_SHORT);
+//                toast.show();
+//                return true;
+//            default:
+//                return super.onContextItemSelected(item);
+//        }
+//    }
 
     @Override
     public void onClick(View view) {
@@ -288,6 +291,7 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
 
     private int currentContextPosition;
     private String currentCity;
+    private static final Double KELVIN = 273.15;
 
     public void setWeatherText(final String str) {
 
@@ -304,7 +308,7 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
                     Gson gson = builder.create();
                     WeatherFromService murzik = gson.fromJson(jsonText, WeatherFromService.class);
                     if (!murzik.getCod().equals(404)) {
-                        String result = "Город: " + murzik.getName() + " Погода: " + murzik.getMain().getTemp();
+                        String result = "Город: " + murzik.getName() + " Погода: " + (murzik.getMain().getTemp() - KELVIN) + " C";
                         Log.i("GSON", "Город: " + murzik.getName() + "\nПогода: " + murzik.getMain().getTemp());
                         postOnMain(result);
                         currentCity = murzik.getName();
@@ -320,7 +324,6 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
 
     }
 
-
     public void postOnMain(String str){
 
         final String strT = str;
@@ -335,66 +338,65 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
     }
 
 
-
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener {
-
-        private TextView categoryNameTextView;
-
-        public MyViewHolder(LayoutInflater inflater, ViewGroup parent){
-            this(inflater.inflate(R.layout.view_item,parent,false));
-            itemView.setOnClickListener(this);
-            categoryNameTextView = (TextView) itemView.findViewById(R.id.category_item_text);
-        }
-
-        public MyViewHolder(View v){
-            super(v);
-            v.setOnCreateContextMenuListener(this);
-        }
-
-        void bind(int position) {
-            String category = DataClass.getValueFromArray(getContext(),position,R.array.cities);
-            categoryNameTextView.setText(category);
-        }
-
-        @Override
-        public void onClick(View view) {
-            //showActivity(this.getLayoutPosition());
-            currentContextPosition = this.getLayoutPosition();
-            itemCityRecyclerView.showContextMenuForChild(view);
-        }
-
-        @Override
-        public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
-            MenuInflater inflater = getActivity().getMenuInflater();
-            inflater.inflate(R.menu.contex_menu, contextMenu);
-
-        }
-    }
-
-    //Адаптер для RecyclerView
-    private class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
-
-        @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater inflater = LayoutInflater.from(getContext());
-            return new MyViewHolder(inflater, parent);
-        }
-
-        @Override
-        public void onBindViewHolder(MyViewHolder holder, int position) {
-            holder.bind(position);
-        }
-
-        @Override
-        public int getItemCount() {
-            return DataClass.getItemCount(getContext(),R.array.cities);
-        }
-    }
-
-    //Запускаем активити для конкретной услуги
-    private void showActivity(int categoryId) {
-        starActivity.onItemClicked(categoryId,checkBoxValue);
-    }
+//    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener {
+//
+//        private TextView categoryNameTextView;
+//
+//        public MyViewHolder(LayoutInflater inflater, ViewGroup parent){
+//            this(inflater.inflate(R.layout.view_item,parent,false));
+//            itemView.setOnClickListener(this);
+//            categoryNameTextView = (TextView) itemView.findViewById(R.id.category_item_text);
+//        }
+//
+//        public MyViewHolder(View v){
+//            super(v);
+//            v.setOnCreateContextMenuListener(this);
+//        }
+//
+//        void bind(int position) {
+//            String category = DataClass.getValueFromArray(getContext(),position,R.array.cities);
+//            categoryNameTextView.setText(category);
+//        }
+//
+//        @Override
+//        public void onClick(View view) {
+//            //showActivity(this.getLayoutPosition());
+//            currentContextPosition = this.getLayoutPosition();
+//            itemCityRecyclerView.showContextMenuForChild(view);
+//        }
+//
+//        @Override
+//        public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+//            MenuInflater inflater = getActivity().getMenuInflater();
+//            inflater.inflate(R.menu.contex_menu, contextMenu);
+//
+//        }
+//    }
+//
+//    //Адаптер для RecyclerView
+//    private class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
+//
+//        @Override
+//        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+//            LayoutInflater inflater = LayoutInflater.from(getContext());
+//            return new MyViewHolder(inflater, parent);
+//        }
+//
+//        @Override
+//        public void onBindViewHolder(MyViewHolder holder, int position) {
+//            holder.bind(position);
+//        }
+//
+//        @Override
+//        public int getItemCount() {
+//            return DataClass.getItemCount(getContext(),R.array.cities);
+//        }
+//    }
+//
+//    //Запускаем активити для конкретной услуги
+//    private void showActivity(int categoryId) {
+//        starActivity.onItemClicked(categoryId,checkBoxValue);
+//    }
 
 
 

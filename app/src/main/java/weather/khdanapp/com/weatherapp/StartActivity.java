@@ -83,7 +83,7 @@ public class StartActivity extends AppCompatActivity implements FragmentOneListe
             Drawable d = Drawable.createFromPath(file.getPath());
             imB.setImageDrawable(d);
         }
-
+        
     }
 
     @Override
