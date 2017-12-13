@@ -30,6 +30,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
+import java.util.Locale;
 
 public class FragmentOne extends Fragment implements View.OnClickListener {
 
@@ -43,6 +44,7 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
     Button additionalSet;
     Button choosingCity;
     TextView t;
+    WeatherDataSourse weatherDataSourse;
 
     static final int CODE_FOR_RESULT = 1;
     static int count;
@@ -60,6 +62,8 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        weatherDataSourse = new WeatherDataSourse(getContext());
 
         View view = inflater.inflate(R.layout.activity_main, container, false);
         String city_n = DataClass.readData(getActivity());
@@ -312,6 +316,8 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
                         Log.i("GSON", "Город: " + murzik.getName() + "\nПогода: " + murzik.getMain().getTemp());
                         postOnMain(result);
                         currentCity = murzik.getName();
+                        double d = murzik.getMain().getTemp() - KELVIN;
+                        weatherDataSourse.addWeatherToDB(murzik.getName(), String.format(Locale.US,"%.2f", d),"13-12-2017");
                     } else postOnMain("City not found");
 
                 } catch (IOException e) {

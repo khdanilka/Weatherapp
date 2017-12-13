@@ -13,7 +13,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HistoryActivity extends AppCompatActivity {
 
@@ -22,6 +26,7 @@ public class HistoryActivity extends AppCompatActivity {
     RecyclerView itemCityRecyclerView;
     MyHistoryAdapter adapter;
 
+    List<WeatherInHistory> weatherList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +47,7 @@ public class HistoryActivity extends AppCompatActivity {
         adapter = new MyHistoryAdapter();
         itemCityRecyclerView.setAdapter(adapter);//Назначим нашему RecyclerView адаптер
 
+        weatherList = new WeatherDataSourse(getApplicationContext()).getAllWeatherHistory();
     }
 
     @Override
@@ -61,12 +67,16 @@ public class HistoryActivity extends AppCompatActivity {
 
     public class MyHistoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener {
 
-        private TextView categoryNameTextView;
+        private TextView city;
+        private TextView temp;
+        private TextView date;
 
         public MyHistoryViewHolder(LayoutInflater inflater, ViewGroup parent){
             this(inflater.inflate(R.layout.view_item,parent,false));
             itemView.setOnClickListener(this);
-            categoryNameTextView = (TextView) itemView.findViewById(R.id.category_item_text);
+            city = (TextView) itemView.findViewById(R.id.category_item_city);
+            temp = (TextView) itemView.findViewById(R.id.category_item_weather);
+            date = (TextView) itemView.findViewById(R.id.category_item_date);
         }
 
         public MyHistoryViewHolder(View v){
@@ -75,8 +85,11 @@ public class HistoryActivity extends AppCompatActivity {
         }
 
         void bind(int position) {
-            String category = DataClass.getValueFromArray(HistoryActivity.this,position,R.array.cities);
-            categoryNameTextView.setText(category);
+            //String category = DataClass.getValueFromArray(HistoryActivity.this,position,R.array.cities);
+            WeatherInHistory category = weatherList.get(position);
+            city.setText(category.getCity());
+            temp.setText(category.getTemp());
+            date.setText(category.getDate());
         }
 
         @Override
@@ -110,7 +123,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return DataClass.getItemCount(HistoryActivity.this,R.array.cities);
+            return weatherList.size();
         }
     }
 

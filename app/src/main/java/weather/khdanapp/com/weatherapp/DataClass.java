@@ -2,10 +2,16 @@ package weather.khdanapp.com.weatherapp;
 
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.provider.ContactsContract;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -89,5 +95,9 @@ final class DataClass {
         Response response = client.newCall(request).execute();
         return response.body().string();
     }
+
+
+
+
 
 }
