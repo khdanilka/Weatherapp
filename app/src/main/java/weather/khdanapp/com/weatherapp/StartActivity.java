@@ -3,7 +3,9 @@ package weather.khdanapp.com.weatherapp;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -38,6 +40,7 @@ public class StartActivity extends AppCompatActivity implements FragmentOneListe
 
     private static final int RC_CODE_PICKER = 2000;
     ImageButton imB;
+    String messageText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +86,25 @@ public class StartActivity extends AppCompatActivity implements FragmentOneListe
             Drawable d = Drawable.createFromPath(file.getPath());
             imB.setImageDrawable(d);
         }
-        
+
+
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intentShare = new Intent(Intent.ACTION_SEND);
+                intentShare.setType("text/plain");
+                intentShare.putExtra(Intent.EXTRA_TEXT, messageText);
+                //  if (intentShare.resolveActivity(getPackageManager()) != null)
+                if (messageText!=null && !messageText.isEmpty()) startActivity(intentShare);
+                else Toast.makeText(getApplicationContext(),"пусто",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+
     }
 
     @Override
@@ -166,6 +187,13 @@ public class StartActivity extends AppCompatActivity implements FragmentOneListe
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+    }
+
+
+    public void setShareText(String text){
+
+        messageText = text;
 
     }
 

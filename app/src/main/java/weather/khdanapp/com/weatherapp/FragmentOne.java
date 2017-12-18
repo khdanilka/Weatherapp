@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -45,6 +46,7 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
     Button choosingCity;
     TextView t;
     WeatherDataSourse weatherDataSourse;
+    String messageText;
 
     static final int CODE_FOR_RESULT = 1;
     static int count;
@@ -318,6 +320,7 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
                         currentCity = murzik.getName();
                         double d = murzik.getMain().getTemp() - KELVIN;
                         weatherDataSourse.addWeatherToDB(murzik.getName(), String.format(Locale.US,"%.2f", d),"13-12-2017");
+                        starActivity.setShareText(result);
                     } else postOnMain("City not found");
 
                 } catch (IOException e) {

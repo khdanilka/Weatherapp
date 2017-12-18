@@ -65,6 +65,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">город на английском</string>
+    <string name="title_activity_test">Test</string>
 
 
 </resources>
