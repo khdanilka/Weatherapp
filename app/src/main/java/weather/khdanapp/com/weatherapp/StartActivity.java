@@ -32,8 +32,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public class StartActivity extends AppCompatActivity implements FragmentOneListener, NavigationView.OnNavigationItemSelectedListener, DialogCityChooseFragment.OnFragmentInteractionListener {
+import weather.khdanapp.com.weatherapp.data.WeatherFromService;
+
+public class StartActivity extends AppCompatActivity implements FragmentOneListener, NavigationView.OnNavigationItemSelectedListener, DialogCityChooseFragment.OnFragmentInteractionListener, MyIntentService.MyIntentServiceListener {
 
     FragmentOne detailFragment;
     private String AVATAR_IMAGE = "avatar";
@@ -143,6 +146,7 @@ public class StartActivity extends AppCompatActivity implements FragmentOneListe
 
     @Override
     public void onFragmentInteraction(String str) {
+
         detailFragment.setWeatherText(str);
     }
 
@@ -189,6 +193,11 @@ public class StartActivity extends AppCompatActivity implements FragmentOneListe
 
         messageText = text;
 
+    }
+
+    @Override
+    public void handleWeather(WeatherFromService w) {
+        detailFragment.handleWeatherInFragment(w);
     }
 
 

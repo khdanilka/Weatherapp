@@ -76,11 +76,6 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
 
         t = (TextView) view.findViewById(R.id.seeAll);
 
-
-
-
-
-
         return view;
     }
 
@@ -267,39 +262,57 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
     private String currentCity;
     private static final Double KELVIN = 273.15;
 
+
+
+    public void handleWeatherInFragment(WeatherFromService w) {
+
+        if (!w.getCod().equals(404)) {
+            String result = "Город: " + w.getName() + " Погода: " + (w.getMain().getTemp() - KELVIN) + " C";
+            Log.i("GSON", "Город: " + w.getName() + "\nПогода: " + w.getMain().getTemp());
+            postOnMain(result);
+            currentCity = w.getName();
+            double d = w.getMain().getTemp() - KELVIN;
+            weatherDataSourse.addWeatherToDB(w.getName(), String.format(Locale.US,"%.2f", d),"13-12-2017");
+            starActivity.setShareText(result);
+        } else postOnMain("City not found");
+
+    }
+
     public void setWeatherText(final String str) {
 
         final String city = str;
-        Log.d("Choosed ",str);
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String jsonText = DataClass.getWeatherForCity(city);
-                    Log.i("JSON",jsonText);
-                    GsonBuilder builder = new GsonBuilder();
-                    Gson gson = builder.create();
-                    WeatherFromService murzik = gson.fromJson(jsonText, WeatherFromService.class);
-                    if (!murzik.getCod().equals(404)) {
-                        String result = "Город: " + murzik.getName() + " Погода: " + (murzik.getMain().getTemp() - KELVIN) + " C";
-                        Log.i("GSON", "Город: " + murzik.getName() + "\nПогода: " + murzik.getMain().getTemp());
-                        postOnMain(result);
-                        currentCity = murzik.getName();
-                        double d = murzik.getMain().getTemp() - KELVIN;
-                        weatherDataSourse.addWeatherToDB(murzik.getName(), String.format(Locale.US,"%.2f", d),"13-12-2017");
-                        starActivity.setShareText(result);
-                    } else postOnMain("City not found");
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }).start();
-
-
+        Log.d("Choosed ", str);
+        MyIntentService.startActionFoo(getContext(), city);
     }
+//
+////        new Thread(new Runnable() {
+////            @Override
+////            public void run() {
+////                try {
+////                    String jsonText = DataClass.getWeatherForCity(city);
+////                    Log.i("JSON",jsonText);
+////                    GsonBuilder builder = new GsonBuilder();
+////                    Gson gson = builder.create();
+////                    WeatherFromService murzik = gson.fromJson(jsonText, WeatherFromService.class);
+////                    if (!murzik.getCod().equals(404)) {
+////                        String result = "Город: " + murzik.getName() + " Погода: " + (murzik.getMain().getTemp() - KELVIN) + " C";
+////                        Log.i("GSON", "Город: " + murzik.getName() + "\nПогода: " + murzik.getMain().getTemp());
+////                        postOnMain(result);
+////                        currentCity = murzik.getName();
+////                        double d = murzik.getMain().getTemp() - KELVIN;
+////                        weatherDataSourse.addWeatherToDB(murzik.getName(), String.format(Locale.US,"%.2f", d),"13-12-2017");
+////                        starActivity.setShareText(result);
+////                    } else postOnMain("City not found");
+////
+////                } catch (IOException e) {
+////                    e.printStackTrace();
+////                }
+////
+////            }
+////        }).start();
+//
+//
+//    }
 
     public void postOnMain(String str){
 
