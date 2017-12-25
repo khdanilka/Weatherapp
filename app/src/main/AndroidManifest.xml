@@ -33,6 +33,16 @@
         <service
             android:name=".MyIntentService"
             android:exported="false" />
+
+        <receiver android:name=".WeatherAppWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/weather_app_widget_info" />
+        </receiver>
     </application>
 
 </manifest>

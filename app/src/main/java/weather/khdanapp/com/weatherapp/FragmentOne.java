@@ -1,5 +1,7 @@
 package weather.khdanapp.com.weatherapp;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -267,15 +269,22 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
     public void handleWeatherInFragment(WeatherFromService w) {
 
         if (!w.getCod().equals(404)) {
-            String result = "Город: " + w.getName() + " Погода: " + (w.getMain().getTemp() - KELVIN) + " C";
+            String result = "Город: " + w.getName() + " Погода: " + String.format(Locale.US,"%.0f", w.getMain().getTemp() - KELVIN) + " C";
             Log.i("GSON", "Город: " + w.getName() + "\nПогода: " + w.getMain().getTemp());
             postOnMain(result);
             currentCity = w.getName();
             double d = w.getMain().getTemp() - KELVIN;
-            weatherDataSourse.addWeatherToDB(w.getName(), String.format(Locale.US,"%.2f", d),"13-12-2017");
+            weatherDataSourse.addWeatherToDB(w.getName(), String.format(Locale.US,"%.0f", d),"13-12-2017");
             starActivity.setShareText(result);
+            updateWidget(w.getName(),String.format(Locale.US,"%.0f", d));
         } else postOnMain("City not found");
 
+    }
+
+    private void updateWidget(String name, String format) {
+        AppWidgetManager mgr = AppWidgetManager.getInstance(getContext()) ;
+        int  appWidgetIds[ ] = mgr.getAppWidgetIds(new ComponentName(getContext(),WeatherAppWidget.class));
+        WeatherAppWidget.updateAppWidget(getContext(),mgr,appWidgetIds[0],name,format);
     }
 
     public void setWeatherText(final String str) {
