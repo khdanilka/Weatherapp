@@ -1,37 +1,30 @@
 package weather.khdanapp.com.weatherapp;
 
-import android.app.Activity;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.PopupMenu;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.util.Locale;
+
+import weather.khdanapp.com.weatherapp.data.DataClass;
+import weather.khdanapp.com.weatherapp.data.WeatherDataSourse;
+import weather.khdanapp.com.weatherapp.data.WeatherFromService;
 
 public class FragmentOne extends Fragment implements View.OnClickListener {
 
@@ -73,15 +66,7 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
 
         checkBoxValue = DataClass.readCheckBox(getActivity());
 
-
-//        if (savedInstanceState!= null) {
-//            int k = savedInstanceState.getInt(CITY_INSTANCE);
-//            city_selection.setSelection(k);
-//        }
-        //else if (city_n > 0) city_selection.setSelection(city_n);
-
         setHasOptionsMenu(true);
-        //seeNext = (TextView) view.findViewById(R.id.seeAll);
 
         additionalSet = (Button) view.findViewById(R.id.additional);
         additionalSet.setOnClickListener(this);
@@ -89,32 +74,15 @@ public class FragmentOne extends Fragment implements View.OnClickListener {
         choosingCity = (Button) view.findViewById(R.id.choosing_city);
         choosingCity.setOnClickListener(this);
 
-//        itemCityRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view); //Найдем наш RecyclerView
-//        registerForContextMenu(itemCityRecyclerView);
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext()); //Создадим LinearLayoutManager
-//        layoutManager.setOrientation(VERTICAL);//Обозначим ориентацию
-//        itemCityRecyclerView.setLayoutManager(layoutManager);//Назначим нашему RecyclerView созданный ранее layoutManager
-//        adapter = new MyAdapter();
-//        itemCityRecyclerView.setAdapter(adapter);//Назначим нашему RecyclerView адаптер
-
         t = (TextView) view.findViewById(R.id.seeAll);
+
+
+
+
 
 
         return view;
     }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        //super.onActivityResult(requestCode, resultCode, data);
-//
-//        if ((data!= null) && (requestCode == CODE_FOR_RESULT)) {
-//            count++;
-//            String str = DataClass.getTextByID(this,R.string.seeAllEmpty) + ". Уже " + count + " раз";
-//            seeNext.setText(str);
-//        }
-//
-//    }
-
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

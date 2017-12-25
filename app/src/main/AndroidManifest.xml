@@ -28,9 +28,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".NavActivity"
-            android:label="@string/title_activity_nav" />
         <activity android:name=".HistoryActivity" />
     </application>
 

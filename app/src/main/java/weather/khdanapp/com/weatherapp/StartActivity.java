@@ -109,13 +109,7 @@ public class StartActivity extends AppCompatActivity implements FragmentOneListe
 
     @Override
     public void onItemClicked(int id,boolean[] b) {
-        ResultFragment detailFragment = new ResultFragment();
-        detailFragment.setWeatherId(id);
-        detailFragment.setMarkWhatNeed(b);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_segment, detailFragment);
-        transaction.addToBackStack(transaction.toString());
-        transaction.commit();
+
     }
 
     @Override
